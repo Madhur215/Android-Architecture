@@ -1,9 +1,9 @@
 package com.example.architecturepractice;
 
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +14,7 @@ import java.util.List;
 
 public class notesAdapter extends RecyclerView.Adapter<notesAdapter.NotesHolder> {
     private List<NoteEntity> notes = new ArrayList<>();
+    private OnItemClickListener listener;
 
     @NonNull
     @Override
@@ -57,12 +58,31 @@ public class notesAdapter extends RecyclerView.Adapter<notesAdapter.NotesHolder>
             description = itemView.findViewById(R.id.description_text_view);
             priority = itemView.findViewById(R.id.priority_text_view);
 
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
+                        listener.OnItemClick(notes.get(getAdapterPosition()));
+                    }
+                }
+            });
+
         }
 
 
 
     }
 
+    public NoteEntity getNoteAt(int position){
+        return notes.get(position);
+    }
 
+    public interface OnItemClickListener{
+        void OnItemClick(NoteEntity note);
+    }
 
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
 }
